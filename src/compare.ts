@@ -1,4 +1,3 @@
-
 // class ExtendableSharedStreetsGeometryProperties {
 //     id:string;
 //     roadClass:RoadClass;
@@ -40,7 +39,7 @@
 //             return false;
 //         if(this.properties.forwardReference.id !== otherGeom.properties.forwardReference.id)
 //             return false;
-        
+
 //         return true;
 //     }
 
@@ -58,10 +57,10 @@
 //     isSame(otherGeom:ExtendableSharedStreetsGeometry):boolean {
 //         if(!this.isGeomSame(otherGeom))   
 //             return false;
-        
+
 //         if(!this.isRefSame(otherGeom))   
 //             return false;
-        
+
 //         return true;
 //     }
 // }
@@ -76,7 +75,7 @@
 
 
 // class MatchedSharedStreetsGeometryProperties extends ExtendableSharedStreetsGeometryProperties{
-    
+
 //     matchType:MatchType;
 //     matchedGeom:ExtendableSharedStreetsGeometry;
 //     matchedForwardCandidateSegments:PathSegment[];
@@ -109,21 +108,21 @@
 //         this.data = data;
 //         for(var item of data) {
 //             this.geometryIdIndex.set(item.properties.id, item);
-            
+
 //             this.intersectionIdIndex.set(item.properties.fromIntersection.id, item.properties.fromIntersection);
 //             this.intersectionIdIndex.set(item.properties.toIntersection.id, item.properties.toIntersection);
 
 //             this.referencedIdIndex.set(item.properties.forwardReference.id, item.properties.forwardReference);
 //             if(item.properties.backReference)
 //                 this.referencedIdIndex.set(item.properties.backReference.id, item.properties.backReference);
-            
+
 //         }
 //     }   
 
 //     async getMatch(feature1:ExtendableSharedStreetsGeometry, cache:LocalCache, matchTileBuild:string, matchTileHierarchy:number):Promise<MatchedSharedStreetsGeometry> {
 //         var matchedGeom = new MatchedSharedStreetsGeometry(feature1);
 //         if(this.geometryIdIndex.has(feature1.properties.id)) {
-            
+
 //             var feature2 = this.geometryIdIndex.get(feature1.properties.id);
 
 //             if(feature1.isSame(feature2)) {
@@ -144,7 +143,7 @@
 
 //         }
 //         else {
-            
+
 //             // not an exact match try fallback methods 
 //             // method 2: uses referenceIds
 
@@ -165,10 +164,10 @@
 //                     return matchedGeom;
 //                 }
 //             }
-            
+
 
 //             // method 3: use matcher
-            
+
 //             // TODO allow setting matcher config 
 //             var matcher = new Matcher(cache);
 //             matcher.bearingTolerance = 45;
@@ -183,7 +182,7 @@
 //                 return l.sort((p1:PathCandidate, p2:PathCandidate) => {
 //                 p1.calcScore();
 //                 p2.calcScore();	
-    
+
 //                 if(p1 && p2 && p1.score > p2.score) {
 //                     return 1;
 //                 }
@@ -198,23 +197,23 @@
 //                     else
 //                         return 0;
 //                 }
-    
+
 //             })};
 
 //             var forwardCandidates = await matcher.getCandidatesForRef(feature1.properties.forwardReference, feature1, null)
 //             var sortedForwardCandidates = sortCandidates(forwardCandidates);
 
-            
+
 //             var sortedBackwardCandidates = [];
 //             if(feature1.properties.backReference) { 
 //                 var backwardCandidates = [];
 //                 backwardCandidates = await matcher.getCandidatesForRef(feature1.properties.backReference, feature1, null);
 //                 sortedBackwardCandidates = sortCandidates(backwardCandidates);
 //             }
-            
+
 //             matchedGeom.properties.matchedForwardCandidateSegments = [];
 //             matchedGeom.properties.matchedBackCandidateSegments = [];
-               
+
 //             if(sortedForwardCandidates.length > 0) {
 //                 for(var pathSegment of sortedForwardCandidates[0].segments) {
 //                     matchedGeom.properties.matchedForwardCandidateSegments.push(pathSegment);
@@ -222,8 +221,8 @@
 //                 matchedGeom.properties.matchType = MatchType.MATCHED_CANDIDATES;
 //                 matchedGeom.properties.forwardCandidateScore = sortedForwardCandidates[0].calcScore();
 //             }
-            
-            
+
+
 //             if(sortedBackwardCandidates.length != 0) {
 //                 for(var pathSegment of sortedBackwardCandidates[0].segments) {
 //                     matchedGeom.properties.matchedBackCandidateSegments.push(pathSegment);
@@ -234,7 +233,7 @@
 
 //             if(matchedGeom.properties.matchType == MatchType.MATCHED_CANDIDATES)
 //                 return matchedGeom;
-            
+
 //         }   
 //         matchedGeom.properties.matchType = MatchType.UNMATCHED;
 //         return matchedGeom;

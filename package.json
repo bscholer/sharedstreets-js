@@ -2,7 +2,7 @@
   "name": "sharedstreets",
   "version": "0.15.3",
   "description": "SharedStreets, a 'digital commons' for the street",
-  "main": "build/src/index.js",
+  "exports": "./build/src/index.js",
   "bin": {
     "shst": "./bin/run"
   },
@@ -15,6 +15,7 @@
     "/bin",
     "/src"
   ],
+  "type": "module",
   "oclif": {
     "commands": "./build/src/commands",
     "bin": "shst",
@@ -24,7 +25,7 @@
   },
   "scripts": {
     "pretest": "tsc",
-    "prepack": "rm -rf build && tsc && mkdir -p build/src/proto && cp src/proto/*.js build/src/proto/ && oclif-dev manifest",
+    "prepack": "rm -rf build && tsc && mkdir -p build/src/proto && cp src/proto/*.js build/src/proto/ && oclif manifest",
     "test": "tsc && colortape build/test_core.js",
     "test-match": "tsc && colortape build/test_match.js",
     "test-graph": "tsc && colortape build/test_graph.js",
@@ -53,7 +54,7 @@
   },
   "homepage": "https://github.com/sharedstreets/sharedstreets-js#readme",
   "devDependencies": {
-    "@oclif/dev-cli": "^1.26.10",
+    "oclif": "^3.2.16",
     "@types/benchmark": "*",
     "@types/glob": "*",
     "@types/node": "*",
@@ -88,7 +89,7 @@
     "@types/levelup": "^5.1.2",
     "@types/osrm": "^5.25.2",
     "bignumber.js": "9.x",
-    "chalk": "^5.1.0",
+    "chalk": "^4.1.2",
     "cli-progress": "^3.11.2",
     "const": "^1.0.0",
     "expand-tilde": "^2.0.2",

@@ -1,6 +1,6 @@
 import * as Benchmark from "benchmark";
 import { FormOfWay } from "sharedstreets-types";
-import * as sharedstreets from "./src/";
+import * as sharedstreets from "./src/index.js";
 
 // Fixtures
 const message = "Intersection 110.000000 45.000000";
