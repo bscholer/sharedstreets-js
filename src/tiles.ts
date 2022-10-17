@@ -42,6 +42,7 @@ export function getTileIdsForPolygon(polygon: turfHelpers.Feature<turfHelpers.Po
 
   var polyBound = bbox(polygon)
 
+  console.log(polyBound.map(d => console.log(typeof d)))
   var nwPoint = destination([polyBound[0], polyBound[1]], buffer, 315, { 'units': 'meters' });
   var sePoint = destination([polyBound[2], polyBound[3]], buffer, 135, { 'units': 'meters' });
   let bounds = [nwPoint.geometry.coordinates[0], nwPoint.geometry.coordinates[1], sePoint.geometry.coordinates[0], sePoint.geometry.coordinates[1]];

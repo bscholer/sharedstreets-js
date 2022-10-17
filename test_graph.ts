@@ -1,11 +1,8 @@
 import * as turfHelpers from "@turf/helpers";
 import * as fs from "fs";
 import envelope from '@turf/envelope';
-
-
 import { TilePathParams } from './src/index.js';
 import { Graph } from "./src/graph.js";
-
 import test from "tape";
 
 test("sharedstreets -- graph test", async (t: any) => {

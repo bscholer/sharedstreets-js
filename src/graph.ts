@@ -7,27 +7,18 @@ import { TileIndex } from './tile_index.js';
 import { lonlatsToCoords } from './index.js';
 import { RoadClass, SharedStreetsGeometry, SharedStreetsReference } from 'sharedstreets-types';
 import { execSync } from 'child_process';
-import length from '@turf/length';
+import length from "@turf/length";
 import distance from '@turf/distance';
 import along from '@turf/along';
 import bearing from '@turf/bearing';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import { resolveHome, rmse } from './util.js';
-
-
 import OSRM from "osrm";
-
 import xml from "xml";
-
 import stream from "stream";
-
-
 import chalk from "chalk";
-
 import path from "path";
-
 import util from "util";
-
 import leveldown from "leveldown";
 import uuidHash from "uuid-by-string";
 
@@ -95,7 +86,7 @@ const MAX_BEARING_TOLERANCE = 180; // 360 +/- tolerance
 const REFERNECE_GEOMETRY_OFFSET = 2;
 const MAX_ROUTE_QUERIES = 16;
 
-// TODO need to pull this from PBF enum defintion 
+// TODO need to pull this from PBF enum defintion
 
 // @property {number} Motorway=0 Motorway value
 //  * @property {number} Trunk=1 Trunk value

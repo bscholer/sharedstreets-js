@@ -2,22 +2,22 @@ import * as turfHelpers from "@turf/helpers";
 import { lineString } from "@turf/helpers";
 import length from "@turf/length";
 import * as fs from "fs";
-import * as glob from "glob";
+
+import envelope from "@turf/envelope";
+import glob from "glob";
 import * as path from "path";
 import * as sharedstreetsPbf from "sharedstreets-pbf";
+import test from "tape";
+import { CleanedLines, CleanedPoints } from "./src/geom.js";
+import { Graph } from "./src/graph.js";
 import * as sharedstreets from "./src/index.js";
 import { TileIndex, TilePath, TilePathGroup, TilePathParams, TileType } from "./src/index.js";
-import envelope from "@turf/envelope";
-import { Graph } from "./src/graph.js";
 import { getTile, getTileIdsForPoint, getTileIdsForPolygon } from "./src/tiles.js"
-import { CleanedLines, CleanedPoints } from "./src/geom.js";
-
-import test from "tape";
+import bboxPolygon from "@turf/bbox-polygon";
 
 const pt1 = [110, 45];
 const pt2 = [-74.003388, 40.634538];
 const pt3 = [-74.004107, 40.63406];
-
 
 const BUILD_TEST_OUPUT = false;
 
@@ -319,7 +319,7 @@ test("tiles -- build tile paths ", (t: any) => {
 
   // test path parsing
   var tilePath = new TilePath(pathString);
-  t.deepEqual(tilePath, {
+  t.deepEqual(Object.fromEntries(Object.entries(tilePath)), {
     "tileId": "12-1171-1566",
     "tileType": "geometry",
     "source": "osm/planet-180430",
@@ -332,15 +332,15 @@ test("tiles -- build tile paths ", (t: any) => {
 
   // test path group
   var pathGroup = new TilePathGroup([tilePath]);
-  t.deepEqual(pathGroup, {
+  t.deepEqual(Object.fromEntries(Object.entries(pathGroup)), {
     source: 'osm/planet-180430',
     tileHierarchy: 6,
     tileTypes: ['geometry'],
     tileIds: ['12-1171-1566']
   });
 
-  // test path gruop eumeration
-  t.deepEqual([...pathGroup], [{
+  // test path group enumeration
+  t.deepLooseEqual([...pathGroup], [{
     source: 'osm/planet-180430',
     tileHierarchy: 6,
     tileType: 'geometry',
@@ -438,10 +438,12 @@ test("match points", async (t: any) => {
   var cleanedPoints = new CleanedPoints(pointsIn);
 
   var points: turfHelpers.FeatureCollection<turfHelpers.Point> = turfHelpers.featureCollection(cleanedPoints.clean);
+  console.log(points.bbox);
 
   var params = new TilePathParams();
   params.source = 'osm/planet-180430';
   params.tileHierarchy = 6;
+  console.log(params);
 
   // test matcher point candidates
   var matcher = new Graph(null, params);
