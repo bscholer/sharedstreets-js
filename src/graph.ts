@@ -2,7 +2,6 @@ import * as turfHelpers from '@turf/helpers';
 import { Feature, LineString } from '@turf/helpers';
 import { TilePathGroup, TilePathParams, TileType } from './tiles.js';
 import { createWriteStream, existsSync, mkdirSync } from 'fs';
-import levelup from 'levelup';
 import { TileIndex } from './tile_index.js';
 import { lonlatsToCoords } from './index.js';
 import { RoadClass, SharedStreetsGeometry, SharedStreetsReference } from 'sharedstreets-types';
@@ -19,8 +18,11 @@ import stream from "stream";
 import chalk from "chalk";
 import path from "path";
 import util from "util";
-import leveldown from "leveldown";
 import uuidHash from "uuid-by-string";
+import { Level } from "level";
+import * as url from "url";
+import { resolve } from 'import-meta-resolve';
+import * as fs from "fs";
 
 const DEFAULT_SEARCH_RADIUS = 10;
 const MIN_CONFIDENCE = 0.5;
@@ -28,22 +30,19 @@ const OPTIMIZE_GRAPH = true;
 const USE_LOCAL_CACHE = true;
 const SHST_GRAPH_CACHE_DIR = resolveHome('~/.shst/cache/graphs/.js');
 
+async function getOSRMDirectory() {
+  return resolve("osrm", import.meta.url).then(osrmPath => {
+    const osrmLibPath = path.dirname(url.fileURLToPath(osrmPath));
+    const osrmDirPath = path.join(osrmLibPath, "..");
 
-function getOSRMDirectory() {
-  return "../node_modules/osrm/";
-
-  // const require = createRequire(import.meta.url);
-  // const osrmPath = require.resolve('osrm');
-  // const osrmLibPath = path.dirname(osrmPath);
-  // const osrmDirPath = path.join(osrmLibPath, '..');
-  //
-  // if (fs.existsSync(osrmDirPath)) {
-  //   return osrmDirPath
-  // } else
-  //   return null
+    if (fs.existsSync(osrmDirPath)) {
+      return osrmDirPath;
+    } else return null;
+  });
 }
 
-const OSRM_DIR = getOSRMDirectory();
+const OSRM_DIR = await getOSRMDirectory();
+console.log("OSRM_DIR", OSRM_DIR);
 
 export enum MatchType {
   DIRECT = 'direct',
@@ -387,7 +386,7 @@ export class LevelDB {
   db;
 
   constructor(directory) {
-    this.db = levelup(leveldown.default(directory));
+    this.db = new Level(directory);
   }
 
   async get(key: string): Promise<any> {
@@ -713,7 +712,7 @@ export class Graph {
 
     // fall back to hmm for probabilistic path discovery
     if (!this.osrm)
-      throw "Graph not buit. call buildGraph() before running queries."
+      throw "Graph not built. call buildGraph() before running queries."
 
     var hmmOptions = {
       coordinates: feature.geometry.coordinates,
@@ -823,7 +822,7 @@ export class Graph {
 
     // fall back to hmm for probabilistic path discovery
     if (!this.osrm)
-      throw "Graph not buit. call buildGraph() before running queries."
+      throw "Graph not built. call buildGraph() before running queries."
 
 
     var hmmOptions = {

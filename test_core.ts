@@ -438,15 +438,14 @@ test("match points", async (t: any) => {
   var cleanedPoints = new CleanedPoints(pointsIn);
 
   var points: turfHelpers.FeatureCollection<turfHelpers.Point> = turfHelpers.featureCollection(cleanedPoints.clean);
-  console.log(points.bbox);
 
   var params = new TilePathParams();
   params.source = 'osm/planet-180430';
   params.tileHierarchy = 6;
-  console.log(params);
 
   // test matcher point candidates
-  var matcher = new Graph(null, params);
+  var matcher = new Graph(envelope(points), params);
+  matcher.buildGraph();
 
   var matchedPoints: turfHelpers.Feature<turfHelpers.Point>[] = [];
   for (let searchPoint of points.features) {
@@ -586,7 +585,6 @@ test("match lines 2 -- snapping and directed edges", async (t: any) => {
   const expected_1b_in = fs.readFileSync(expected_1b_file);
   const expected_1b: {} = JSON.parse(expected_1b_in.toLocaleString());
   t.deepEqual(matchedLines, expected_1b);
-
 
   t.end();
 });
