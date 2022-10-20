@@ -42,7 +42,6 @@ async function getOSRMDirectory() {
 }
 
 const OSRM_DIR = await getOSRMDirectory();
-console.log("OSRM_DIR", OSRM_DIR);
 
 export enum MatchType {
   DIRECT = 'direct',
@@ -852,7 +851,7 @@ export class Graph {
 
           // this is kind of convoluted due to the sparse info returned in the OSRM annotations...
           // write out sequence of nodes and edges as emitted from walking OSRM-returned nodes
-          // finding the actual posistion and directionality of the OSRM-edge within the ShSt graph
+          // finding the actual position and directionality of the OSRM-edge within the ShSt graph
           // edge means that we have to snap start/end points in the OSRM geom
 
           //console.log(JSON.stringify(match.geometry));
@@ -1025,6 +1024,7 @@ export class Graph {
             continue;
 
           segment.geometry = await this.tileIndex.geom(segment.referenceId, segment.section[0], segment.section[1]);
+          // console.log('1029', JSON.stringify(segment.geometry));
 
 
           if (segment.geometry) {

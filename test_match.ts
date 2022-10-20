@@ -23,7 +23,8 @@ test("match points", async (t: any) => {
   params.tileHierarchy = 6;
 
   // test matcher point candidates
-  var matcher = new Graph(null, params);
+  var matcher = new Graph(envelope(points), params);
+  matcher.buildGraph();
 
   var matchedPoints: turfHelpers.Feature<turfHelpers.Point>[] = [];
   for (let searchPoint of points.features) {
@@ -127,8 +128,11 @@ test("match lines 2 -- snapping and directed edges", async (t: any) => {
 
   var matchedLines = turfHelpers.featureCollection([]);
   for (var line of lines.features) {
+    // console.log(line);
     var pathCandidate = await matcher.matchGeom(line);
     matchedLines.features.push(pathCandidate.matchedPath);
+    // console.log(JSON.stringify(pathCandidate.matchedPath));
+    // console.log("\n\n----------------------------------\n\n");
   }
 
 
@@ -141,9 +145,10 @@ test("match lines 2 -- snapping and directed edges", async (t: any) => {
 
   const expected_1a_in = fs.readFileSync(expected_1a_file);
   const expected_1a: {} = JSON.parse(expected_1a_in.toLocaleString());
+  // console.log(JSON.stringify(matchedLines));
   t.deepEqual(matchedLines, expected_1a);
 
-  matcher.snapIntersections = false;
+  matcher.snapIntersections = true;
 
   var matchedLines = turfHelpers.featureCollection([]);
   for (var line of lines.features) {
